@@ -1,5 +1,19 @@
 function Sidebar(props) {
-    return <h2>{props.greet}</h2>;
+
+    const asideStyle = {
+        background: "purple",
+        width: "calculateNewValue(30% - 10px)",
+        marginLeft: "10px"
+    }
+
+    return (
+        <aside 
+            style={asideStyle} 
+            className="sidebar-component"
+        >
+            <h2>{props.greet}</h2>
+        </aside>
+    );
 }
 
 export default Sidebar;
