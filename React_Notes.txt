@@ -1,0 +1,206 @@
+REACT TUTORIAL NOTES for
+youtube.com/watch?v=cd3P3yXyx30&ab_channel=Nerd%27slesson
+
+Header.js <- React element
+header.js <- HTML element
+^^^ Capitalization of files is important
+
+Component Example:
+function Heading() {			<- function must also be capitalized
+	let title = "some text"
+	return (
+		<h1>{title}</h1>	<- curly brackets indicate variable
+	);
+};
+
+<h1>{title}</h1>	<- JavaScript syntax extension
+Transpiling		<- converting JSX to HTML
+
+-------------------
+
+index.css <-- styles for entire website
+
+export (makes component available to be imported)
+export default App; (exports App component)
+export {something}; (exports App component with different referencing name)
+
+React props (kindof like a js object)
+* Pass data between components
+* Arguments are passed like HTML attributes (JSX syntax)
+* Use keyword props inside of a function
+* Can only send data from parent to child
+* Child should never modify its own props
+
+In App.js
+function App(props) {
+  return (
+    <h1>{props.title}</h1>
+  );
+}
+
+In index.js:
+root.render(
+  <React.StrictMode>
+    <App title="Test" />
+  </React.StrictMode>
+);
+
+--------------
+
+Returning JSX must be wrapped in a div or fragment
+
+Good:
+return(
+	<div>
+		<h1>hi</h1>
+	</div>
+);
+
+return(
+	<>
+		<h1>hi</h1>
+	</>
+);
+
+BAD:
+return(
+	<h1>hi</h1>
+);
+
+NOTE: className replaces the usual class keyword that we would use when referencing the stylesheet in typical HTML
+
+---------------
+
+Event Handling
+
+onclick (HTML) --> onClick (JSX)
+
+You can pass in function declarations as props
+
+return (
+	<Counter onClick={clickHandler} />
+)
+
+--------------
+
+State
+
+Don't want to constantly lift state up through parents and then
+prop drill because the ultimate parents will contain many more states than is necessary.
+
+Instead, use context (global states)
+Component that needs data gets it directly from the context API.
+Extract state into separate file that holds state in context.
+Any other file that needs it imports the separate file and uses the states that it contains.
+
+Context provider <- component that stores the state
+Context consumer <- component that will use the state
+
+Common organization of stateful and stateless components: have a stateful parent that sends its state down to a bunch of stateless children that receive the state via props and then render it on the screen. Note: props are immutable, so the children can't change the state they are passed.
+
+---------------
+
+Navigation
+
+npm i react-router-dom@6
+
+React loads all of your different interfaces on the same page. There is no concept of loading another webpage, since you're always on the same one. SINGLE PAGE APPLICATIONS (SPAs)
+
+To do this, you need the following import statements:
+
+in index.js:
+import {BrowserRouter} from 'react-router-dom';
+
+in App.js:
+import {Routes, Route} from 'react-router-dom';
+
+Use:
+<Routes>
+	<Route path="/path" element={<component>} />
+	<Route path="/path" element={<component>} />
+</Routes>
+To setup a navbar.
+the specified paths will load the specified components as if they were a separate page.
+
+e.g. with nav bar
+
+<div className="App">
+	<nav className="nav">
+        	<Link to="/header" className="nav-item">Header Link</Link>
+	</nav>
+	<Routes>
+        	<Route path="/header" element={<Header name="New page." color="purple" />} />
+	</Routes>
+</div>
+
+------------------------
+
+Conditional Rendering
+
+You can render components conditionally (e.g. with Links) based on whether certain state values are met.
+
+function currentMessage() {
+
+	const day = new Date().getDay();
+
+	return (
+		{
+	 	 day >=1 && day <=5
+		 ? <Workdays />
+		 : <Weekends />
+		}
+	);
+}
+
+
+2 components, each holding a different message: one is Workdays and other is Weekends. Therefore, the returned component differs based on the day constant.
+
+------------------
+
+Assets
+
+Generally: if your app can compile without an image or something else, you can keep it in the public folder. Otherwise, keep it in an assets folder inside src.
+
+Loading images
+
+Option 1:
+import logo from './assets/logo1.png';
+// Basically another component
+function Logo(props) {
+  const userPic = <img src={logo} alt="logo" />;
+  return userPic;
+}
+
+Option 2:
+<img src={require('./assets/logo1.png')} alt="logo" />
+
+Option 3:
+const randomImageUrl = "url to random image";
+<img src={randomImageUrl} alt="logo" />
+
+Video & Audio
+
+For local video files:
+<video src={myVid} width={375} height={250} controls />
+
+Certain websites will have specific snippents of code you copy paste to embed their video in your app. (embedded 3rd party videos)
+
+Third party NPM packages also exist to help you with this. Check frequency of updates and number of contributors to see if it's a good package. Also internet search the package name. 
+
+react-player is a good example of video playing package.
+
+npm install react-player
+
+const vidUrl = "https://www.facebook.com/facebook/videos/10153231379946729";
+return (
+	<div className='vidHolder'>
+        	<h1>react-player example</h1>
+        	<ReactPlayer 
+        	  url={vidUrl}
+        	  playing={false}
+        	  volume={0.5}
+        	/>
+	</div>
+);
+
+
